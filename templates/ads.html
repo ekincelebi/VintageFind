@@ -1,0 +1,24 @@
+
+{% extends "layout.html" %}
+{% block title %}Products list{% endblock %}
+{% block content %}
+    <h1 class="title">Currently Available Ads</h1>
+
+
+    {% if products %}
+    <table class="table is-striped is-fullwidth">
+      {% for product_key, product in products %}
+      <tr>
+        <td>
+            <a href="{{ url_for('product_page', product_key=product_key) }}">
+                {{ product.name }}
+                {% if product.price %} ({{ product.price }}) {% endif %}
+                </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+
+
+{% endblock %}
