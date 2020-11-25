@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Movie{% endblock %}
+{% block title %}Vintage Find{% endblock %}
 {% block content %}
     <h1 class="title">Product</h1>
 
@@ -15,4 +15,13 @@
       </tr>
       {% endif %}
     </table>
+
+    <div class="field is-grouped">
+      <div class="control">
+        <a class="button is-primary is-outlined is-small"
+           href="{{ request.path }}/edit">Edit</a>
+      </div>
+    </div>
 {% endblock %}
+
+

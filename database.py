@@ -10,6 +10,9 @@ class Database:
         self.products[self._last_product_key] = product
         return self._last_product_key
 
+    def update_product(self, product_key, product):
+        self.products[product_key] = product
+
     def delete_product(self, product_key):
         if product_key in self.products:
             del self.products[product_key]
