@@ -31,15 +31,8 @@ def product_add_page():
         values = {"name": "", "price": ""}
         return render_template("product_edit.html", min_price=0, max_year=10000, values=values)
     else:
-        valid = validate_product_form(request.form)
-        if not valid:
-            return render_template(
-                "product_edit.html",
-                min_price=0, max_year=10000,
-                values=request.form,
-            )
-        name = request.form.data["name"]
-        price = request.form.data["price"]
+        name = request.form["name"]
+        price = request.form["price"]
         product = Product(name, price=price)
         db = current_app.config["db"]
         product_key = db.add_product(product)
@@ -59,22 +52,21 @@ def product_edit_page(product_key):
              min_price=0, max_year=10000, values=values,
         )
     else:
-        valid = validate_product_form(request.form)
+        '''valid = validate_product_form(request.form)
         if not valid:
             return render_template(
                 "product_edit.html",
                 min_price=0, max_year=10000,
-                values=request.form,
-            )
-        name = request.form.data["name"]
-        price = request.form.data["price"]
-        product = Product(name, price=price)
+                values=request.form,)'''
+        form_name = request.form["name"]
+        form_price = request.form["price"]
+        product = Product(form_name, price=int(form_price ) if form_price  else None)
         db = current_app.config["db"]
         db.update_product(product_key,product)
         return redirect(url_for("product_page",product_key=product_key))
 
     
-
+'''
     def validate_product_form(form):
     form.data = {}
     form.errors = {}
@@ -99,3 +91,4 @@ def product_edit_page(product_key):
             form.data["price"] = price
 
     return len(form.errors) == 0
+    '''
