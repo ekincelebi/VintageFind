@@ -5,8 +5,9 @@ from database import Database
 
 def home_page():
     today = datetime.today()
-    day_name = today.strftime("%A")
-    return render_template("home.html", day=day_name)
+    #day_name = today.strftime("%A")
+    #return render_template("home.html", day=day_name)
+    return render_template("home.html")
 
 def ads_page():
     db = current_app.config["db"]
