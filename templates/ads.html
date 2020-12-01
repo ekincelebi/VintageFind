@@ -16,7 +16,6 @@
             </label>
             <a href="{{ url_for('product_page', product_key=product_key) }}">
                 {{ product.name }}
-                {% if product.price %} ({{ product.price }}) {% endif %}
             </a>
           </td>
         </tr>

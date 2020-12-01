@@ -21,12 +21,12 @@ class Database:
         product = self.products.get(product_key)
         if product is None:
             return None
-        product_ = Product(product.name, price=product.price)
+        product_ = Product(product.name, situation=product.situation, description=product.description)
         return product_
 
     def get_products(self):
         products = []
         for product_key, product in self.products.items():
-            product_ = Product(product.name, price=product.price)
+            product_ = Product(product.name, situation=product.situation, description=product.description)
             products.append((product_key,product_ ))
         return products

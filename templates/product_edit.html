@@ -13,10 +13,17 @@
       </div>
 
       <div class="field">
-        <label for="price" class="label">Price(You don't have to specify)</label>
+        <label for="situation" class="label">Specify condition! Do you want it brand new or worn maybe!!</label>
         <div class="control">
-          <input type="number" name="price" class="input"
-                 min="{{ min_price }}" max="{{ max_price }}" value="{{ values['price'] }}"/>
+          <input type="text" name="situation" class="input" required="required" value="{{ values['situation'] }}"/>
+        </div>
+        
+      </div>
+
+      <div class="field">
+        <label for="description" class="label">Can you describe it more?(You don't have to specify)</label>
+        <div class="control">
+          <input type="text" name="description" class="input" value="{{ values['description'] }}"/>
         </div>
         
       </div>

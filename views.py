@@ -28,12 +28,14 @@ def product_page(product_key):
 
 def product_add_page():
     if request.method == "GET":
-        values = {"name": "", "price": ""}
-        return render_template("product_edit.html", min_price=0, max_year=10000, values=values)
+        values = {"name": "", "situation": "", "description": ""}
+        #return render_template("product_edit.html", min_price=0, max_year=10000, values=values)
+        return render_template("product_edit.html",values=values)
     else:
         name = request.form["name"]
-        price = request.form["price"]
-        product = Product(name, price=price)
+        situation = request.form["situation"]
+        description = request.form["description"]
+        product = Product(name, situation=situation, description=description)
         db = current_app.config["db"]
         product_key = db.add_product(product)
         return redirect(url_for("product_page", product_key=product_key))
@@ -46,10 +48,10 @@ def product_edit_page(product_key):
         product = db.get_product(product_key)
         if product is None:
             abort(404)
-        values = {"name": product.name, "price": product.price}
+        values = {"name": product.name, "situation": product.situation, "description": product.description}
         return render_template(
             "product_edit.html",
-             min_price=0, max_year=10000, values=values,
+            values=values,
         )
     else:
         '''valid = validate_product_form(request.form)
@@ -59,8 +61,10 @@ def product_edit_page(product_key):
                 min_price=0, max_year=10000,
                 values=request.form,)'''
         form_name = request.form["name"]
-        form_price = request.form["price"]
-        product = Product(form_name, price=int(form_price ) if form_price  else None)
+        form_situation = request.form["situation"]
+        form_description = request.form["description"]
+        #product = Product(form_name,  price=int(form_price ) if form_price  else None)
+        product = Product(form_name, situation=form_situation, description=str(form_description) if form_description  else None)
         db = current_app.config["db"]
         db.update_product(product_key,product)
         return redirect(url_for("product_page",product_key=product_key))

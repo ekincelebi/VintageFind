@@ -8,10 +8,14 @@
         <th>Title:</th>
         <td>{{ product.name }}</td>
       </tr>
-      {% if product.price %}
       <tr>
-        <th>Price:</th>
-        <td>{{ product.price }}</td>
+        <th>Situation:</th>
+        <td>{{ product.situation }}</td>
+      </tr>
+      {% if product.description %}
+      <tr>
+        <th>Description:</th>
+        <td>{{ product.description }}</td>
       </tr>
       {% endif %}
     </table>
