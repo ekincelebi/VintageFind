@@ -4,10 +4,15 @@ from product import Product
 from database import Database
 
 def home_page():
-    today = datetime.today()
+    #today = datetime.today()
     #day_name = today.strftime("%A")
     #return render_template("home.html", day=day_name)
-    return render_template("home.html")
+    db = current_app.config["db"]
+    products = db.get_products()
+    return render_template("home.html", products=sorted(products))
+    
+        
+    
 
 def ads_page():
     db = current_app.config["db"]
@@ -15,6 +20,9 @@ def ads_page():
         products = db.get_products()
         return render_template("ads.html", products=sorted(products))
     else:
+        if not current_user.is_admin:
+            abort(401)
+
         form_product_keys = request.form.getlist("product_keys")
         for form_product_key in form_product_keys:
             db.delete_product(int(form_product_key))
@@ -27,7 +35,18 @@ def product_page(product_key):
         abort(404)
     return render_template("product.html", product=product)
 
+def product_page_home(product_key):
+    db = current_app.config["db"]
+    product = db.get_product(product_key)
+    if product is None:
+        abort(404)
+
+    return render_template("product_info_total.html", product=product)
+
+@login_required
 def product_add_page():
+    if not current_user.is_admin:
+        abort(401)
     if request.method == "GET":
         values = {"name": "", "situation": "", "description": ""}
         #return render_template("product_edit.html", min_price=0, max_year=10000, values=values)
@@ -42,7 +61,7 @@ def product_add_page():
         return redirect(url_for("product_page", product_key=product_key))
 
 
-
+@login_required
 def product_edit_page(product_key):
     if request.method == "GET":
         db = current_app.config["db"]
@@ -97,3 +116,24 @@ def product_edit_page(product_key):
 
     return len(form.errors) == 0
     '''
+
+def login_page():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.data["username"]
+        user = get_user(username)
+        if user is not None:
+            password = form.data["password"]
+            if hasher.verify(password, user.password):
+                login_user(user)
+                flash("You have logged in.")
+                next_page = request.args.get("next", url_for("home_page"))
+                return redirect(next_page)
+        flash("Invalid credentials.")
+    return render_template("login.html", form=form)
+
+
+def logout_page():
+    logout_user()
+    flash("You have logged out.")
+    return redirect(url_for("home_page"))

@@ -1,0 +1,93 @@
+{% extends "layout_user.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.csrf_token }}
+        <div class="field">
+            {{ form.username.label(class="label")}}
+            <div class="control has-icons-right">
+                {{ form.username(required=True, class='input',
+                                             placeholder='your username') }}
+                <span class="icon is-small is-right">
+                    <i class="fa fa-user"></i>
+                </span>
+                {% if form.username.errors %}
+                    <p class="help is-danger">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="field">
+            {{ form.email.label(class="label")}}
+
+            <div class="control has-icons-right">
+                {{ form.email(required=True, class='input',
+                                             placeholder='your email') }}
+                <span class="icon is-small is-right">
+                    <i class="fa fa-envelope"></i>
+                </span>
+                {% if form.email.errors %}
+                    <p class="help is-danger">
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="field">
+            {{ form.password.label(class="label")}}
+            <div class="control has-icons-right">
+                {{ form.password(required=True, class='input',
+                                             placeholder='your password') }}
+                <span class="icon is-small is-right">
+                    <i class="fa fa-key"></i>
+                </span>
+                {% if form.password.errors %}
+                    <p class="help is-danger">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="field">
+            {{ form.confirm_password.label(class="label")}}
+            <div class="control has-icons-right">
+                {{ form.confirm_password(required=True, class='input',
+                                             placeholder='confirm password') }}
+                <span class="icon is-small is-right">
+                    <i class="fa fa-key"></i>
+                </span>
+                {% if form.confirm_password.errors %}
+                    <p class="help is-danger">
+                        {% for error in form.confirm_password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        
+        <button class="button is-block is-large is-fullwidth is-primary is-outlined">
+            Sign Up!
+        </button>
+
+    </form>
+    <div class="has-text-centered">
+        <a href="{{ url_for('login_page') }}"> Already have an account? Log in now!</a>
+    </div>
+
+</div>
+
+
+
+{% endblock content %}

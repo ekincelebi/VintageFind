@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+            <div class="column is-6 is-offset-3">
+                <div class="box">
+                    <form method="POST" action="">
+                        {{ form.csrf_token }}
+                        
+                        <div class="field">
+                            {{ form.title.label(class="label")}}
+                            <div class="control">
+                                {{ form.title(required=True, class='input',
+                                                     placeholder='title') }}
+                                
+                                {% if form.title.errors %}
+                                    <p class="help is-danger">
+                                        {% for error in form.title.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="field">
+                            {{ form.description.label(class="label")}}
+                            <div class="control">
+                                {{ form.description(required=True, class='textarea',
+                                                     placeholder='description') }}
+                                
+                                {% if form.description.errors %}
+                                    <p class="help is-danger">
+                                        {% for error in form.description.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        
+
+                        <div class="field">
+                            {{ form.category.label(class="label")}}
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    {{ form.category }}
+                                </div>
+                            </div>
+                        </div>
+
+                
+                        <div class="has-text-centered">
+                            {{ form.submit(class="button is-vcentered is-primary is-outlined") }}
+                        </div>
+                
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>       
+      
+{% endblock content %}

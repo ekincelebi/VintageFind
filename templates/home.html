@@ -4,8 +4,28 @@
     <section class="hero">
       <div class="hero-body">
         <div class="container has-text-centered">
-          <h1 class="title">Find available ads!</h1>
+          <h1 class="title">All available ads!</h1>
         </div>
+
+        {% if products %}
+    <form action="" method="post" name="product_list"></form>
+      <table class="table is-striped is-fullwidth">
+        {% for product_key, product in products %}
+        <tr>
+          <td>
+            <a href="{{ url_for('product_page_home', product_key=product_key) }}">
+                {{ product.name }}
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+      <div class="field is-grouped">
       </div>
+    </form>
+    {% endif %}
+      
+  
+  </div>
     </section>
 {% endblock %}

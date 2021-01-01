@@ -1,0 +1,58 @@
+{% extends "layout_user.html" %}
+{% block content %}
+<div class="content-section">
+    <form action="" method="post" name="login">
+        {{ form.csrf_token }}
+        
+        <div class="field">
+            {{ form.username.label(class="label")}}
+            <div class="control has-icons-right">
+                {{ form.username(required=True, autofocus=True,
+                    class='input is-large',
+                    placeholder='your username') }}
+                <span class="icon is-small is-right">
+                    <i class="fa fa-user"></i>
+                </span>
+                {% if form.username.errors %}
+                    <p class="help is-danger">
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="field">
+            {{ form.password.label(class="label")}}
+            <div class="control has-icons-right">
+                {{ form.password(required=True, class='input is-large',
+                                     placeholder='your password') }}
+                <span class="icon is-small is-right">
+                    <i class="fa fa-key"></i>
+                </span>
+                {% if form.password.errors %}
+                    <p class="help is-danger">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+
+        <button class="button is-block is-large is-fullwidth is-primary is-outlined">
+            Login
+        </button>
+
+        
+
+        <div class="has-text-centered">
+            <a href="{{ url_for('register_page') }}"> Don't you have an account? Sign Up!</a>
+        </div>
+
+    </form>
+</div>
+
+    
+{% endblock content %}
