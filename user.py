@@ -1,13 +1,13 @@
-from flask import current_app
 from flask_login import UserMixin
-#ios/Users/ios/Documents/GitHub/VintageFind/venv/bin/python3 -m pip install flask_login
+from flask import current_app
+
 
 class User(UserMixin):
-    def __init__(self, username, password):
+    def __init__(self, username, password, email):
         self.username = username
         self.password = password
+        self.email = email
         self.active = True
-        self.is_admin = False
 
     def get_id(self):
         return self.username
@@ -17,9 +17,10 @@ class User(UserMixin):
         return self.active
 
 
-def get_user(user_id):
-    password = current_app.config["PASSWORDS"].get(user_id)
-    user = User(user_id, password) if password else None
-    if user is not None:
-        user.is_admin = user.username in current_app.config["ADMIN_USERS"]
-    return user
+def get_user(user_name):
+    db = current_app.config["db"]
+    user = db.get_user_info(user_name)
+    if user is None:
+        pass
+    else:
+        return User(user_name , user[2], user[3])

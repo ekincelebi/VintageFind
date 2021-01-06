@@ -1,31 +1,56 @@
-
 {% extends "layout.html" %}
-{% block title %}My Products{% endblock %}
 {% block content %}
-    <h1 class="title">My Published Ads</h1>
+<div class="container"><hr></div>
 
 
-    {% if products %}
-    <form action="" method="post" name="product_list"></form>
-      <table class="table is-striped is-fullwidth">
-        {% for product_key, product in products %}
-        <tr>
-          <td>
-            <label class="checkbox">
-              <input type="checkbox" name="product_keys" value="{{ product_key }}"/>
-            </label>
-            <a href="{{ url_for('product_page', product_key=product_key) }}">
-                {{ product.name }}
-            </a>
-          </td>
-        </tr>
-        {% endfor %}
-      </table>
-      <div class="field is-grouped">
-        <div class="control">
-          <button class="button is-danger is-small">Delete</button>
+<div class="container has-text-centered">
+    <h2 class="subtitle">
+        Find unique items.
+    </h2>
+    <h1 class="title">
+        Every second new items are posted.
+    </h1>
+    <br>
+    <div class="columns is-centered">
+        <div class="column is-10">
+            <div class="columns is-multiline">
+                
+                {% for post in posts %}  
+                <div class="column is-one-third">
+                    <div class="card rb-card">
+                        <div class="card-image">
+                            <div class="card-image">
+                                <figure class="image is-16by9">
+                                    <img src="">
+                                </figure>
+                            </div>
+                        </div>
+                        <div class="card-content">
+
+                            <div class="columns is-vcentered">
+                                <div class="column is-half">
+                                    <a href="" class="has-text-primary">{{ post.user }}</a>
+                                </div>
+                                <div class="column">
+                                  <p class="bd-notification is-primary">{{ post.post_date }}</p>
+                                </div>
+                              </div>
+                            <h3 class="title is-size-6 ellipsis is-ellipsis-1">
+                                <a href="" class="has-text-primary"></a>
+                                {{ post.item.title }}
+                                </a>
+                            </h3>
+                            <h4 class="subtitle is-size-7 ellipsis is-ellipsis-2">
+                                {{ post.item.description }}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
-      </div>
-    </form>
-    {% endif %}
-  {% endblock %}
+    </div>
+</div>
+
+
+{% endblock content %}
