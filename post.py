@@ -3,5 +3,6 @@ class Post:
         self.item =item
         self.user = user
         self.post_date = post_date
-        self.key = ""
+        self.key = "" #this is the post key 
+        #going to add status key as well
         

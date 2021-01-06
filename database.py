@@ -13,38 +13,42 @@ class Database:
     def __init__(self):
         self.categories = {}
 
-    ###############################user
-    def get_username_from_id(self, id):
+    ### USER QUERIES
+
+    #okey
+    def read_user(self, id):
+        #retrive user from id
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
         query = "SELECT * FROM users WHERE (id = %(id)s)"
         cursor.execute(query, {'id' : id})
-        user = cursor.fetchone()[1]
-        return user
-    
-    def get_user_info(self, username):
-        connection = dbapi2.connect(dsn)
-        cursor = connection.cursor()
-        query = "SELECT * FROM users WHERE (username = %(username)s)"
-        cursor.execute(query, {'username' : username})
         user = cursor.fetchone()
-        return user
-
+        temp = User(username=user[1], password=user[2], email=user[3], phone=user[4])
+        temp.key = user[0]
+        return temp
+    
+    #okey
     def get_user_id(self,username):
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
         query = "SELECT * FROM users WHERE (username = %(username)s)"
         cursor.execute(query, {'username' : username})
-        id = cursor.fetchone()[0]
-        return id
-    
+        user = cursor.fetchone()
+        if user is not None:
+            return user[0]
+        else:
+            pass
+
+    #okey
     def add_user(self,user):
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
         query = "INSERT INTO users (username, password, email, phone_number) VALUES (%s, %s, %s, %s)"
+        #takes "" for the phone number should change 
         cursor.execute(query, (user.username, user.password, user.email, "",))
         connection.commit()
 
+    ##gerek var mı bilmiyorum
     def is_email_taken(self,email):
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
@@ -52,6 +56,29 @@ class Database:
         cursor.execute(query, {'email' : email})
         user = cursor.fetchone()
         return user
+
+    def update_user(self,user, id):
+        #takes userr object as param
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        query ="""UPDATE users SET 
+                    username = %s,
+                    password = %s, 
+                    email = %s,
+                    phone_number = %s
+                    WHERE (id = %s)"""
+        cursor.execute(query, (user.username, user.password, user.email, user.phone, id))
+        #user.key calısmayabilir
+        connection.commit()
+    
+
+
+
+
+
+    
+
+    
 
     ################category
     def add_category(self,category_name):

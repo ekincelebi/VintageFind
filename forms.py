@@ -17,7 +17,6 @@ class RegistrationForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[InputRequired()])
     description = TextAreaField('Description', validators=[InputRequired()])
-    #category = StringField('Category', validators=[InputRequired()])
     category = SelectField(u'Categories',validate_choice=False)
     submit = SubmitField('Publish')
     #image will come later
@@ -27,7 +26,15 @@ class UpdateAccountForm(FlaskForm):
                            validators=[InputRequired()])
     email = StringField('Email',
                         validators=[InputRequired(), Email()])
-    profile_picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg','png'])])
+    
+    phone = StringField('Phone', validators=[InputRequired()])
+
+    password = PasswordField("Password", validators=[InputRequired()])
+
+    """def validate_phone(self, phone):
+        if len(phone.data) != 16:
+            raise ValidationError('Invalid phone number.')"""
+    
     submit = SubmitField('Update')
 
     

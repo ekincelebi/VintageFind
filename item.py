@@ -3,4 +3,7 @@ class Item:
         self.title = title
         self.description = description
         self.category = category
+        self .owner = ""
+        self.key = ""
+        
         

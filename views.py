@@ -22,7 +22,7 @@ def login_page():
         temp = get_user(username)
         if temp is not None:
             #realpassword = temp.password
-            user = User(username, temp.password,temp.email)
+            user = User(username, temp.password,temp.email,temp.phone)
             password = form.password.data
             if password == temp.password: ##burayı sonra hashli yaparsın
                 login_user(user)
@@ -48,7 +48,8 @@ def register_page():
         if temp is not None or email_check is not None:
             return ("Please check your username and password!")
         else:
-            user = User(username,password,email)
+            phone = "" #phone is initially empty
+            user = User(username,password,email,phone)
             db.add_user(user)
             return redirect(url_for('login_page'))
     return render_template('register.html', form=form)
@@ -82,7 +83,9 @@ def ads_page():
     for item in post_list:
         #user,item,date
         #user = db.get_username_from_id(item[1])
-        user = db.get_username_from_id(item[1])
+        user_obj = db.read_user(item[1])
+        user = user_obj.username
+        #user = db.get_username_from_id(item[1])
         item_name = db.get_item_info(item[2])[2]
         item_description = db.get_item_info(item[2])[3]
         item_category_id = db.get_item_info(item[2])[1]
@@ -101,7 +104,9 @@ def ads2_page(category_id):
     for item in post_list:
         #user,item,date
         #user = db.get_username_from_id(item[1])
-        user = db.get_username_from_id(item[1])
+        #user = db.get_username_from_id(item[1])
+        user_obj = db.read_user(item[1])
+        user = user_obj.username
         item_name = db.get_item_info(item[2])[2]
         item_description = db.get_item_info(item[2])[3]
         item_category_id = db.get_item_info(item[2])[1]
@@ -133,18 +138,28 @@ def post_update(post_id):
         form.category.data = item_category
     return render_template('another.html', title='Update Post', form=form, post=post)
 
+
+
 @login_required
 def account():
     form = UpdateAccountForm()
-    if form.validate_on_submit():
-        #update yapmıyor suan icin
-        current_user.username = form.username.data
-        current_user.email = form.email.data
-        #db.session.commit()
-        flash('Your account has been update!', 'success')
-        return redirect(url_for('account'))
-    #######yukarısı update kısmı
     db = current_app.config["db"]
+    user_id = db.get_user_id(current_user.username)
+    if form.validate_on_submit():
+        if current_user.password != form.password.data:
+            return ("Please enter correct password")
+        temp = User(username=form.username.data,password=form.password.data,email=form.email.data,
+        phone=form.password.data)
+        temp.phone = form.phone.data
+        db.update_user(temp,user_id)
+        #flash('Your account has been update!', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.password.data = current_user.password
+        form.phone.data = current_user.phone
+        form.email.data = current_user.email
+    #######yukarısı update kısmı
     post_list = db.bring_users_post(current_user.username)
     posts = []
     for item in post_list:

@@ -13,6 +13,10 @@
                       <div class="is-size-6">
                           <p class="bd-notification is-primary">{{ current_user.email }}</p>
                       </div>
+
+                      <div class="is-size-6">
+                        <p class="bd-notification is-primary">{{ current_user.phone }}</p>
+                    </div>
                   </div>
               </div>
           </div>
@@ -56,6 +60,44 @@
                       {% endif %}
                   </div>
               </div>
+
+              <div class="field">
+                {{ form.phone.label(class="label")}}
+                <div class="control has-icons-right">
+                    {{ form.phone(required=True, class='input',
+                                                 placeholder='phone number') }}
+                    <span class="icon is-small is-right">
+                        <i class="fa fa-phone"></i>
+                    </span>
+                    {% if form.phone.errors %}
+                        <p class="help is-danger">
+                            {% for error in form.phone.errors %}
+                                <span>{{ phone }}</span></br>
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+              
+              <div class="field">
+                {{ form.password.label(class="label")}}
+                <div class="control has-icons-right">
+                    {{ form.password(required=True, class='input',
+                                                 placeholder='please enter your password to commit changes') }}
+                    <span class="icon is-small is-right">
+                        <i class="fa fa-key"></i>
+                    </span>
+                    {% if form.password.errors %}
+                        <p class="help is-danger">
+                            {% for error in form.password.errors %}
+                                <span>{{ error }}</span></br>
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+            
+        
               <div class="has-text-centered">
                   {{ form.submit(class="button is-vcentered is-primary is-outlined") }}
               </div>
