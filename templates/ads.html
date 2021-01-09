@@ -13,6 +13,54 @@
             </h1>
             <br>
             <div class="columns is-centered">
+                <div class ="column is-2">
+                    <ul>
+                        <li>
+                            Situation
+                            <ul>
+                                <li>
+                                    <input type="radio" value='new' class="" name='situation'> New 
+                                </li>
+                                <li>
+                                    <input type="radio" value='old' class="" name='situation'> Old 
+                                </li>
+                                <li>
+                                    <input type="radio" value='worn' class="" name='situation'> Worn 
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </br>
+                    <ul>
+                        <li>
+                            Categories
+                            <ul>
+                                {% for category in categories %} 
+                                <li>
+                                    <input type="radio" value='{{ category }}' class="" name='situation'> {{ category }} 
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </br>
+                    <ul>
+                        <li>
+                            Colors
+                            <ul>
+                                {% for color in colors %} 
+                                <li>
+                                    <input type="radio" value='{{ color }}' class="" name='situation'> {{ color }} 
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    </ul>
+                </br>
+                    <a href="" class="button is-primary">
+                        Go!
+                    </a>
+                </div>
                 <div class="column is-10">
                     <div class="columns is-multiline">
                         
@@ -53,5 +101,20 @@
             </div>
         </div>
     </div>
+<!--
+    <nav class="pagination is-right" role="navigation" aria-label="pagination">
+        <a class="pagination-previous">Previous</a>
+        <a class="pagination-next">Next page</a>
+        <ul class="pagination-list">
+          <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+          <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
+          <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
+          <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
+          <li><span class="pagination-ellipsis">&hellip;</span></li>
+          <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
+        </ul>
+      </nav>
+-->
 </section>
 {% endblock content %}

@@ -103,6 +103,8 @@ def publish_page():
 def ads_page():
     db = current_app.config["db"]
     post_list = db.get_all_posts()
+    categories = [ x[0] for x in db.get_category_names()]
+    colors = ['black', 'white', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'multicolor']
     #user_id,item_id,date
     posts = []
     for item in post_list:
@@ -122,7 +124,7 @@ def ads_page():
         date = item[3]
         temp = Post(tempItem,user,date)
         posts.append(temp)
-    return render_template('ads.html', posts=posts)
+    return render_template('ads.html', posts=posts, categories=categories, colors=colors)
 ####################################################
 @login_required
 def ads2_page(category_id):
