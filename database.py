@@ -114,6 +114,7 @@ class Database:
         return id
 
     ###############item 
+    #buna gerek kalmadı
     def add_item(self,item):
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
@@ -123,24 +124,11 @@ class Database:
         cursor.execute(query, (cat_id, item.title, item.description,))
         connection.commit()
 
-    ###for the image file
-    def get_binary(self,path):
-        with open(path, "rb") as image:
-            f = image.read()
-            b = bytes(f).hex()
-            return b
-
     def add_item_image(self,item,file_name):
         ####let us consider only jpg files available
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
-        # read data from a picture
-        
-        #file_name = "static/profile_pics/default.jpg"
-        #picopen = open(file_name, 'rb').read()
-
         query = "INSERT INTO items (category_id,name,description,image) VALUES (%s, %s, %s, %s)"
-        #binary = self.get_binary(file_name)
         db = current_app.config["db"]
         cat_id = db.get_category_id(item.category) 
         data = (cat_id, item.title, item.description, file_name)
@@ -183,6 +171,14 @@ class Database:
         cursor.execute(query, {'category_id' : category_id})
         rows = cursor.fetchall()
         return rows
+    
+    def delete_item(self, id):
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        query = "DELETE FROM items WHERE (id = %(id)s)"
+        cursor.execute(query, {'id' : id})
+        connection.commit()
+
         
 
     ###############posts

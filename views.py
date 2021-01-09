@@ -137,12 +137,15 @@ def ads2_page(category_id):
             posts.append(temp)
     return render_template('ads.html', posts=posts)
 
-
+@login_required
 def post_update(post_id):
     form = PostForm()
     db = current_app.config["db"]
     post = db.get_post(post_id)
+
     item_id = post[2]
+
+    
     categories = [ x[0] for x in db.get_category_names()]
     form.category.choices = categories
     if form.validate_on_submit():
@@ -154,10 +157,20 @@ def post_update(post_id):
         item_category = db.get_category(item_cat_id)
         item_name = db.get_item_info(item_id)[2]
         item_description = db.get_item_info(item_id)[3]
+        image = db.get_item_info(item_id)[4]
+        image_file = url_for('static', filename='profile_pics/' + image)
         form.title.data = item_name
         form.description.data = item_description
         form.category.data = item_category
-    return render_template('another.html', title='Update Post', form=form, post=post)
+    return render_template('another.html', title='Update Post', form=form, post=post, img = image_file)
+
+
+@login_required
+def delete_post(post_id):
+    db = current_app.config["db"]
+    db.delete_item(post_id)
+    #flash('Your post has been deleted!', 'success')
+    return redirect(url_for("home_page"))
 
 
 

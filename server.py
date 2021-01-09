@@ -25,6 +25,7 @@ def create_app():
     app.add_url_rule("/logout", view_func=views.logout_page)
     app.add_url_rule("/post/create", view_func=views.publish_page , methods=["GET", "POST"])
     app.add_url_rule("/post/<int:post_id>/update", view_func=views.post_update , methods=["GET", "POST"])
+    app.add_url_rule("/post/<int:post_id>/delete", view_func=views.delete_post, methods=['POST'])
     app.add_url_rule("/ads", view_func=views.ads_page , methods=["GET", "POST"])
     app.add_url_rule("/account", view_func=views.account , methods=["GET", "POST"])
     app.add_url_rule("/ads/<int:category_id>", view_func=views.ads2_page , methods=["GET", "POST"])
