@@ -5,5 +5,6 @@ class Item:
         self.category = category
         self .owner = ""
         self.key = ""
+        self.image = ""
         
         

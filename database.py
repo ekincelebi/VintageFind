@@ -122,6 +122,30 @@ class Database:
         cat_id = db.get_category_id(item.category) ####im not sure
         cursor.execute(query, (cat_id, item.title, item.description,))
         connection.commit()
+
+    ###for the image file
+    def get_binary(self,path):
+        with open(path, "rb") as image:
+            f = image.read()
+            b = bytes(f).hex()
+            return b
+
+    def add_item_image(self,item,file_name):
+        ####let us consider only jpg files available
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        # read data from a picture
+        
+        #file_name = "static/profile_pics/default.jpg"
+        #picopen = open(file_name, 'rb').read()
+
+        query = "INSERT INTO items (category_id,name,description,image) VALUES (%s, %s, %s, %s)"
+        #binary = self.get_binary(file_name)
+        db = current_app.config["db"]
+        cat_id = db.get_category_id(item.category) 
+        data = (cat_id, item.title, item.description, file_name)
+        cursor.execute(query, data )
+        connection.commit()
     
     def get_item_id(self,name):
         connection = dbapi2.connect(dsn)

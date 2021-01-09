@@ -26,7 +26,7 @@ INIT_STATEMENTS = [
         category_id serial NOT NULL,
         name varchar(32) NOT NULL,
         description varchar(500) NOT NULL,
-        image bytea,
+        image varchar(120) NOT NULL DEFAULT 'default.jpg',
         CONSTRAINT CONSTRAINT1 FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE );
     ''',
     '''CREATE TABLE posts (

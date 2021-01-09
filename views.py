@@ -5,6 +5,9 @@ from flask_wtf import FlaskForm
 from user import User, get_user
 from item import Item
 from post import Post
+import secrets
+import os
+
 
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user   
 from flask import abort, current_app, render_template, request, redirect, url_for, flash
@@ -54,6 +57,15 @@ def register_page():
             return redirect(url_for('login_page'))
     return render_template('register.html', form=form)
 
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(current_app.root_path, 'static/profile_pics', picture_fn)
+    form_picture.save(picture_path)
+
+    return picture_fn
+
 @login_required
 def publish_page():
     form = PostForm()
@@ -65,9 +77,13 @@ def publish_page():
     if form.validate_on_submit():
         cat = form.category.data
         newItem = Item(title=form.title.data,description=form.description.data,category=cat)
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            #current_user.image_file = picture_file
+        #newItem.image = form.image.data
         #add item 
         db = current_app.config["db"]
-        db.add_item(newItem)
+        db.add_item_image(newItem, picture_file)
 
         db.create_post(current_user.username,form.title.data)
         #flash('Your post has been created!', 'success')
@@ -89,7 +105,11 @@ def ads_page():
         item_name = db.get_item_info(item[2])[2]
         item_description = db.get_item_info(item[2])[3]
         item_category_id = db.get_item_info(item[2])[1]
+        item_image = db.get_item_info(item[2])[4]
+        image_file = url_for('static', filename='profile_pics/' + item_image)
+
         tempItem = Item(title=item_name,description=item_description,category=item_category_id)
+        tempItem.image = image_file
         date = item[3]
         temp = Post(tempItem,user,date)
         posts.append(temp)
@@ -116,6 +136,7 @@ def ads2_page(category_id):
         if item_category_id == category_id:
             posts.append(temp)
     return render_template('ads.html', posts=posts)
+
 
 def post_update(post_id):
     form = PostForm()
@@ -168,7 +189,10 @@ def account():
         user = current_user.username
         item_name = db.get_item_info(item[2])[2]
         item_description = db.get_item_info(item[2])[3]
+        item_image = db.get_item_info(item[2])[4]
+        image_file = url_for('static', filename='profile_pics/' + item_image)
         tempItem = Item(title=item_name,description=item_description,category="")
+        tempItem.image = image_file
         date = item[3]
         temp = Post(tempItem,user,date)
         temp.key = item[0] #init key

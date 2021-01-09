@@ -19,6 +19,7 @@ class PostForm(FlaskForm):
     description = TextAreaField('Description', validators=[InputRequired()])
     category = SelectField(u'Categories',validate_choice=False)
     submit = SubmitField('Publish')
+    picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     #image will come later
 
 class UpdateAccountForm(FlaskForm):
