@@ -41,7 +41,7 @@
                         </div>
                         
                         
-
+                        
                         <div class="field">
                             {{ form.category.label(class="label")}}
                             <div class="control">
@@ -50,6 +50,22 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="field">
+                            {{ form.color.label(class="label")}}
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    {{ form.color }}
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        
+                        <input type="checkbox" value='new' class="example" name='situation' checked> New <br/>
+                        <input type="checkbox" value='old' class="example" name='situation'> Old <br/>
+                        <input type="checkbox" value='worn' class="example" name='situation'> Worn <br/>
+                        
 
                         
                     

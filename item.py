@@ -6,5 +6,7 @@ class Item:
         self .owner = ""
         self.key = ""
         self.image = ""
+        self.color = ""
+        self.situation = ""
         
         

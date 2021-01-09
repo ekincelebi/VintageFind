@@ -73,11 +73,19 @@ def publish_page():
 
     db = current_app.config["db"]
     categories = [ x[0] for x in db.get_category_names()]
+    colors = ['black', 'white', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'multicolor']
     
     form.category.choices = categories
+    form.color.choices = colors
     if form.validate_on_submit():
         cat = form.category.data
-        newItem = Item(title=form.title.data,description=form.description.data,category=cat)
+        col = form.color.data
+        situation = request.form.get('situation')
+        
+        newItem = Item(title=form.title.data,description=form.description.data, category=cat)
+        newItem.color = col
+        newItem.situation = situation
+        
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             #current_user.image_file = picture_file

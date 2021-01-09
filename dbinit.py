@@ -28,6 +28,8 @@ INIT_STATEMENTS = [
         name varchar(32) NOT NULL,
         description varchar(500) NOT NULL,
         image varchar(120) NOT NULL DEFAULT 'default.jpg',
+        color varchar(20),
+        situation varchar(20),
         CONSTRAINT CONSTRAINT1 FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE );
     ''',
     '''CREATE TABLE posts (
@@ -35,6 +37,8 @@ INIT_STATEMENTS = [
         user_id serial NOT NULL,
         item_id serial NOT NULL,
         post_date date  NOT NULL,
+        is_active boolean DEFAULT TRUE,
+        is_sold boolean DEFAULT FALSE ,
         CONSTRAINT CONSTRAINT1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
         CONSTRAINT CONSTRAINT2 FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE);
     ''',

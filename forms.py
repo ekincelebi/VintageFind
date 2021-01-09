@@ -18,6 +18,7 @@ class PostForm(FlaskForm):
     title = StringField('Title', validators=[InputRequired()])
     description = TextAreaField('Description', validators=[InputRequired()])
     category = SelectField(u'Categories',validate_choice=False)
+    color = SelectField(u'Color',validate_choice=False)
     submit = SubmitField('Publish')
     picture = FileField('Image', validators=[InputRequired(),FileAllowed(['jpg', 'png'])])
     #image will come later

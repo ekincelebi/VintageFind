@@ -139,10 +139,10 @@ class Database:
         ####let us consider only jpg files available
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
-        query = "INSERT INTO items (category_id,name,description,image) VALUES (%s, %s, %s, %s)"
+        query = "INSERT INTO items (category_id,name,description,image,color,situation) VALUES (%s, %s, %s, %s, %s, %s)"
         db = current_app.config["db"]
         cat_id = db.get_category_id(item.category) 
-        data = (cat_id, item.title, item.description, file_name)
+        data = (cat_id, item.title, item.description, file_name, item.color, item.situation)
         cursor.execute(query, data )
         connection.commit()
     
