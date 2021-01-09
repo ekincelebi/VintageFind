@@ -3,12 +3,13 @@ from flask import current_app
 
 
 class User(UserMixin):
-    def __init__(self, username, password, email, phone):
+    def __init__(self, username, password, email, phone, profile_pic):
         self.key = ""
         self.username = username
         self.password = password
         self.phone = phone 
         self.email = email
+        self.profile_pic = profile_pic
         self.active = True
 
 
@@ -29,5 +30,5 @@ def get_user(user_name):
         pass
     else:
         user = db.read_user(user_id)
-        return User(user.username,user.password,user.email,user.phone)
+        return User(user.username,user.password,user.email,user.phone,user.profile_pic)
 

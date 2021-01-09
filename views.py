@@ -25,7 +25,7 @@ def login_page():
         temp = get_user(username)
         if temp is not None:
             #realpassword = temp.password
-            user = User(username, temp.password,temp.email,temp.phone)
+            user = User(username, temp.password,temp.email,temp.phone,temp.profile_pic)
             password = form.password.data
             if password == temp.password: ##burayı sonra hashli yaparsın
                 login_user(user)
@@ -52,7 +52,8 @@ def register_page():
             return ("Please check your username and password!")
         else:
             phone = "" #phone is initially empty
-            user = User(username,password,email,phone)
+            profile_pic = "default.jpg"
+            user = User(username,password,email,phone,profile_pic)
             db.add_user(user)
             return redirect(url_for('login_page'))
     return render_template('register.html', form=form)
@@ -172,6 +173,12 @@ def delete_post(post_id):
     #flash('Your post has been deleted!', 'success')
     return redirect(url_for("home_page"))
 
+@login_required
+def delete_user(username):
+    db = current_app.config["db"]
+    db.delete_user(username)
+    #flash('Your post has been deleted!', 'success')
+    return redirect(url_for("home_page"))
 
 
 @login_required
@@ -179,20 +186,31 @@ def account():
     form = UpdateAccountForm()
     db = current_app.config["db"]
     user_id = db.get_user_id(current_user.username)
+    #pp = url_for('static', filename='profile_pics/' + current_user.profile_pic)
+    image_file = url_for('static', filename='profile_pics/' + current_user.profile_pic)
+    
     if form.validate_on_submit():
         if current_user.password != form.password.data:
             return ("Please enter correct password")
-        temp = User(username=form.username.data,password=form.password.data,email=form.email.data,
-        phone=form.password.data)
-        temp.phone = form.phone.data
+        temp = User(username=form.username.data,password=form.password.data,email=form.email.data, phone=form.password.data, profile_pic=current_user.profile_pic)
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            temp.profile_pic = picture_file
+
+        if form.phone.data:
+            temp.phone = form.phone.data
         db.update_user(temp,user_id)
         #flash('Your account has been update!', 'success')
         return redirect(url_for('account'))
+
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.password.data = current_user.password
         form.phone.data = current_user.phone
         form.email.data = current_user.email
+        
+        
+        
     #######yukarısı update kısmı
     post_list = db.bring_users_post(current_user.username)
     posts = []
@@ -211,7 +229,7 @@ def account():
         temp.key = item[0] #init key
         posts.append(temp)
 
-    return render_template('account.html', posts=posts, form=form)
+    return render_template('account.html', posts=posts, form=form, img = image_file)
 
 
 

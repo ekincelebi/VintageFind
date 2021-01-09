@@ -15,7 +15,8 @@ INIT_STATEMENTS = [
         username varchar(32) NOT NULL UNIQUE,
         password varchar(200) NOT NULL,
         email varchar(254) NOT NULL UNIQUE,
-        phone_number varchar(11) NOT NULL );
+        phone_number varchar(11) NOT NULL ,
+        profile_pic varchar(120) NOT NULL);
     ''',
     '''CREATE TABLE categories (
         id serial PRIMARY KEY,

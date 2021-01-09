@@ -23,7 +23,8 @@ class Database:
         query = "SELECT * FROM users WHERE (id = %(id)s)"
         cursor.execute(query, {'id' : id})
         user = cursor.fetchone()
-        temp = User(username=user[1], password=user[2], email=user[3], phone=user[4])
+        temp = User(username=user[1], password=user[2], email=user[3], phone=user[4], profile_pic=user[5])
+        temp.profile_pic = user[5]
         temp.key = user[0]
         return temp
     
@@ -43,9 +44,9 @@ class Database:
     def add_user(self,user):
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
-        query = "INSERT INTO users (username, password, email, phone_number) VALUES (%s, %s, %s, %s)"
+        query = "INSERT INTO users (username, password, email, phone_number, profile_pic ) VALUES (%s, %s, %s, %s, %s)"
         #takes "" for the phone number should change 
-        cursor.execute(query, (user.username, user.password, user.email, "",))
+        cursor.execute(query, (user.username, user.password, user.email, "", "default.jpg",))
         connection.commit()
 
     ##gerek var mı bilmiyorum
@@ -65,12 +66,22 @@ class Database:
                     username = %s,
                     password = %s, 
                     email = %s,
-                    phone_number = %s
+                    phone_number = %s,
+                    profile_pic = %s
                     WHERE (id = %s)"""
-        cursor.execute(query, (user.username, user.password, user.email, user.phone, id))
+        cursor.execute(query, (user.username, user.password, user.email, user.phone, user.profile_pic, id))
         #user.key calısmayabilir
         connection.commit()
+
+
     
+    def delete_user(self,username):
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        query = "DELETE FROM users WHERE (username = %(username)s)"
+        cursor.execute(query, {'username' : username})
+        connection.commit()
+
 
 
 
@@ -243,75 +254,6 @@ class Database:
         
 
 #dsn = """user='postgres' password='docker' host='localhost' port=5432 dbname='postgres'"""
-"""def add_category(category_name):
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "INSERT INTO categories (category_name) VALUES (%s)"
-    cursor.execute(query,(category_name,))
-    connection.commit()
-
-def read_categories():
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "select id, category_name from categories"
-    cursor.execute(query)
-    rows = cursor.fetchall()
-    return rows
-
-def is_username_exist(username):
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "SELECT ID FROM users WHERE (USERNAME = %(username)s)"
-    cursor.execute(query, {'username' : username})
-    if cursor.fetchone() is None:
-        print("no user")
-        return False
-    else:
-        print("user exist")
-        return True
-
-def get_user(email):
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "SELECT * FROM users WHERE (email = %(email)s)"
-    cursor.execute(query, {'email' : email})
-    user = cursor.fetchone()
-    return user
-def get_password_from_username(username):
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "SELECT * FROM users WHERE (username = %(username)s)"
-    cursor.execute(query, {'username' : username})
-    password = cursor.fetchone()[2]
-    return password
-
-def is_email_exist(email):
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "SELECT ID FROM users WHERE (EMAIL= %(email)s)"
-    cursor.execute(query, {'email' : email})
-    if cursor.fetchone() is None:
-        print("e mail adress does not exist")
-        return False
-    else:
-        print("e mail adress exist")
-        return True
-
-#umarım dogrudur
-def get_user_from_email(email):
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "SELECT PASSWORD FROM users WHERE (EMAIL= %(email)s)"
-    cursor.execute(query, {'email' : email})
-    user = cursor.fetchone()[0]
-    return user
-
-def add_user(user):
-    connection = dbapi2.connect(dsn)
-    cursor = connection.cursor()
-    query = "INSERT INTO users (username, password, email, phone_number) VALUES (%s, %s, %s, %s)"
-    cursor.execute(query, (user.username, user.password, user.email, user.phonenumber,))
-    connection.commit()"""
 
 
 

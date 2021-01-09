@@ -5,6 +5,11 @@
       <div class="column is-6 is-offset-3">
           <div class="box">
               <div class="columns is-mobile is-centered is-vcentered">
+                <div class="column is-one-third">
+                    <figure class="image is-128x128">
+                        <img class="is-rounded" src="{{ img }}">
+                    </figure>
+                </div>
                   <div class="column">
                       <div class="has-text-left">
                           <div class="is-size-3">
@@ -96,13 +101,28 @@
                     {% endif %}
                 </div>
             </div>
+
+            <div class="form-group">
+                {{ form.picture.label(class="label") }}
+                {{ form.picture(class="form-control-file") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class="text-danger">{{ error }}</span></br>
+                    {% endfor %}
+                {% endif %}
+            </div>
             
         
               <div class="has-text-centered">
                   {{ form.submit(class="button is-vcentered is-primary is-outlined") }}
+                  
+                  
               </div>
       
           </form>
+          <form action="{{ url_for('delete_user', username=current_user.username) }}" method="POST">
+            <input class="button is-danger is-outlined" type="submit" value="Delete My Account">
+        </form>
       </div>
   </div>
   <div class="container"><hr></div>
