@@ -69,18 +69,19 @@ def save_picture(form_picture):
 
 @login_required
 def publish_page():
-    form = PostForm()
-
     db = current_app.config["db"]
     categories = [ x[0] for x in db.get_category_names()]
     colors = ['black', 'white', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'multicolor']
-    
+
+    form = PostForm()
+
     form.category.choices = categories
     form.color.choices = colors
+
     if form.validate_on_submit():
         cat = form.category.data
         col = form.color.data
-        situation = request.form.get('situation')
+        situation = request.form.get('situation') #checkbox
         
         newItem = Item(title=form.title.data,description=form.description.data, category=cat)
         newItem.color = col
@@ -88,13 +89,14 @@ def publish_page():
         
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
-            #current_user.image_file = picture_file
-        #newItem.image = form.image.data
-        #add item 
-        db = current_app.config["db"]
-        db.add_item_image(newItem, picture_file)
 
-        db.create_post(current_user.username,form.title.data)
+        db.add_item_image(newItem, picture_file) #save item to item table
+        ###create post neden title ismini alıyor ki bunu düzelt 
+        
+        tag1 = form.tag1.data #
+        tag2 = form.tag2.data #
+
+        db.create_post(current_user.username,form.title.data,tag1,tag2)
         #flash('Your post has been created!', 'success')
         return redirect(url_for('home_page'))
     return render_template("publish.html", form=form)
@@ -122,10 +124,15 @@ def ads_page():
         tempItem = Item(title=item_name,description=item_description,category=item_category_id)
         tempItem.image = image_file
         date = item[3]
+
         temp = Post(tempItem,user,date)
+
+        temp.tag1 = item[6]
+        temp.tag2 = item[7]
         posts.append(temp)
     return render_template('ads.html', posts=posts, categories=categories, colors=colors)
 ####################################################
+
 @login_required
 def ads2_page(category_id):
     db = current_app.config["db"]
@@ -179,9 +186,13 @@ def post_update(post_id):
 @login_required
 def delete_post(post_id):
     db = current_app.config["db"]
-    db.delete_item(post_id)
+    item_id = db.get_post(post_id)[2]
+    db.delete_item(item_id)
+    db.delete_post(post_id)
+    
+    
     #flash('Your post has been deleted!', 'success')
-    return redirect(url_for("home_page"))
+    return redirect(url_for("account"))
 
 @login_required
 def delete_user(username):

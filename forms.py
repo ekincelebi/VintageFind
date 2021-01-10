@@ -19,20 +19,19 @@ class PostForm(FlaskForm):
     description = TextAreaField('Description', validators=[InputRequired()])
     category = SelectField(u'Categories',validate_choice=False)
     color = SelectField(u'Color',validate_choice=False)
-    submit = SubmitField('Publish')
     picture = FileField('Image', validators=[InputRequired(),FileAllowed(['jpg', 'png'])])
-    #image will come later
+    tag1 = StringField('Tag 1')
+    tag2 = StringField('Tag 2')
+    submit = SubmitField('Publish')
+
 
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username',
                            validators=[InputRequired()])
     email = StringField('Email',
                         validators=[InputRequired(), Email()])
-    
     phone = StringField('Phone')
-
     password = PasswordField("Password", validators=[InputRequired()])
-
     picture = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
 
 

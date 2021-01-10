@@ -79,8 +79,37 @@
                             {% endif %}
                         </div>
 
-                        
-                     
+                        <div class="field">
+                            {{ form.tag1.label(class="label")}}
+                            <div class="control">
+                                {{ form.tag1(required=False, class='input',
+                                                     placeholder='tag1') }}
+                                
+                                {% if form.tag1.errors %}
+                                    <p class="help is-danger">
+                                        {% for error in form.tag1.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            {{ form.tag2.label(class="label")}}
+                            <div class="control">
+                                {{ form.tag2(required=False, class='input',
+                                                     placeholder='tag2') }}
+                                
+                                {% if form.tag2.errors %}
+                                    <p class="help is-danger">
+                                        {% for error in form.tag2.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
                 
                         <div class="has-text-centered">
                             {{ form.submit(class="button is-vcentered is-primary is-outlined") }}

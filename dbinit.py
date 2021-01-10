@@ -38,7 +38,9 @@ INIT_STATEMENTS = [
         item_id serial NOT NULL,
         post_date date  NOT NULL,
         is_active boolean DEFAULT TRUE,
-        is_sold boolean DEFAULT FALSE ,
+        is_sold boolean DEFAULT FALSE,
+        tag1 varchar(15),
+        tag2 varchar(15),
         CONSTRAINT CONSTRAINT1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
         CONSTRAINT CONSTRAINT2 FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE);
     ''',

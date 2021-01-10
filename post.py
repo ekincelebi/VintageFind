@@ -1,8 +1,14 @@
 class Post:
-    def __init__(self,item,user,post_date):
-        self.item =item
-        self.user = user
+    def __init__(self,item,username,post_date):
+        self.item = item
+        self.username = username
         self.post_date = post_date
-        self.key = "" #this is the post key 
-        #going to add status key as well
+        self.key = ""
+        self.is_sold = False
+        self.is_active = True
+        self.tag1 = None #??
+        self.tag2 = None #Maybe not none
+         
+    
+        
         

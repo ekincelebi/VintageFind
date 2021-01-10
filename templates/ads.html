@@ -2,7 +2,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="container"><hr></div>
-<section class="hero is-medium has-text-centered" >
+<section class="hero has-text-centered" >
     <div class="hero-body ">
         <div class="container">
             <h2 class="subtitle">
@@ -92,6 +92,17 @@
                                     <h4 class="subtitle is-size-7 ellipsis is-ellipsis-2">
                                         {{ post.item.description }}
                                     </h4>
+                                    {% if post.tag1 is not none %}
+                                    <span class="tag is-light">{{ post.tag1 }}</span>
+                                    {% else %}
+                                        NONE
+                                    {% endif %}
+
+                                    {% if post.tag2 is not none %}
+                                    <span class="tag is-light">{{ post.tag2 }}</span>
+                                    {% else %}
+                                        NONE
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

@@ -84,13 +84,6 @@ class Database:
 
 
 
-
-
-
-    
-
-    
-
     ################category
     def add_category(self,category_name):
         connection = dbapi2.connect(dsn)
@@ -194,7 +187,7 @@ class Database:
 
     ###############posts
 
-    def create_post(self, username, item_name):
+    def create_post(self, username, item_name, tag1, tag2):
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
         
@@ -205,9 +198,29 @@ class Database:
         user_id = db.get_user_id(username)
         item_id = db.get_item_id(item_name)
         
-        query = "INSERT INTO posts (user_id, item_id, post_date) VALUES (%s, %s, %s)"
-        cursor.execute(query, (user_id, item_id, today,))
-        connection.commit()
+        
+        if tag1 is None and tag2 is None:
+            query = "INSERT INTO posts (user_id, item_id, post_date) VALUES (%s, %s, %s)"
+            cursor.execute(query, (user_id, item_id, today,))
+            connection.commit()
+
+        if tag1 is not None and tag2 is None:
+            query = "INSERT INTO posts (user_id, item_id, post_date, tag1) VALUES (%s, %s, %s, %s)"
+            cursor.execute(query, (user_id, item_id, today, tag1))
+            connection.commit()
+        
+        if tag2 is not None and tag1 is None:
+            query = "INSERT INTO posts (user_id, item_id, post_date, tag1) VALUES (%s, %s, %s, %s)"
+            cursor.execute(query, (user_id, item_id, today, tag2))
+            connection.commit()
+        
+        else: 
+            query = "INSERT INTO posts (user_id, item_id, post_date, tag1, tag2) VALUES (%s, %s, %s, %s, %s)"
+            cursor.execute(query, (user_id, item_id, today, tag1, tag2,))
+            connection.commit()
+        
+        
+        
     
     def get_all_posts(self):
         connection = dbapi2.connect(dsn)
@@ -242,6 +255,13 @@ class Database:
         cursor.execute(query, {'item_id' : item_id})
         rows = cursor.fetchone()
         return rows
+
+    def delete_post(self, id):
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        query = "DELETE FROM posts WHERE (id = %(id)s)"
+        cursor.execute(query, {'id' : id})
+        connection.commit()
 
 
 
