@@ -1,6 +1,6 @@
 from passlib.hash import pbkdf2_sha256 as hasher
 from datetime import datetime
-from forms import LoginForm, RegistrationForm, PostForm, UpdateAccountForm
+from forms import LoginForm, RegistrationForm, PostForm, UpdateAccountForm, SearchForm
 from flask_wtf import FlaskForm
 from user import User, get_user
 from item import Item
@@ -107,6 +107,7 @@ def ads_page():
     post_list = db.get_all_posts()
     categories = [ x[0] for x in db.get_category_names()]
     colors = ['black', 'white', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'multicolor']
+
     #user_id,item_id,date
     posts = []
     for item in post_list:
@@ -130,6 +131,9 @@ def ads_page():
         temp.tag1 = item[6]
         temp.tag2 = item[7]
         posts.append(temp)
+
+        
+
     return render_template('ads.html', posts=posts, categories=categories, colors=colors)
 ####################################################
 
@@ -160,16 +164,36 @@ def post_update(post_id):
     form = PostForm()
     db = current_app.config["db"]
     post = db.get_post(post_id)
+    item_id = post[2]  
+    tag1 = post[6]
+    tag2 = post[7]
 
-    item_id = post[2]
-
-    
     categories = [ x[0] for x in db.get_category_names()]
     form.category.choices = categories
+    colors = ['black', 'white', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'multicolor']
+    form.color.choices = colors
+
     if form.validate_on_submit():
         cat_id = db.get_category_id(form.category.data)
-        db.update_item(item_id, form.title.data, form.description.data, cat_id)
+        col = form.color.data
+        situation = request.form.get('situation')
+        if request.form.get('is_sold') ==  'true':
+            is_sold = True
+        else:
+            is_sold = False
+        
+        if request.form.get('is_available') ==  'true':
+            is_available = True
+        else:
+            is_available = False
+
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+
+        db.update_item(item_id, form.title.data, form.description.data, cat_id, col, situation, picture_file) #image, color, situtation
+        db.update_post(post_id,is_available,is_sold,form.tag1.data,form.tag2.data)
         return redirect(url_for('post_update', post_id=post_id))
+    
     elif request.method == 'GET':
         item_cat_id = db.get_item_info(item_id)[1]
         item_category = db.get_category(item_cat_id)
@@ -180,7 +204,15 @@ def post_update(post_id):
         form.title.data = item_name
         form.description.data = item_description
         form.category.data = item_category
+        form.tag1.data = tag1
+        form.tag2.data = tag2
     return render_template('another.html', title='Update Post', form=form, post=post, img = image_file)
+
+@login_required
+def search(situation,category,color):
+    myStr = situation + " " + category + " " + color
+    return(myStr)
+
 
 
 @login_required
@@ -189,8 +221,7 @@ def delete_post(post_id):
     item_id = db.get_post(post_id)[2]
     db.delete_item(item_id)
     db.delete_post(post_id)
-    
-    
+
     #flash('Your post has been deleted!', 'success')
     return redirect(url_for("account"))
 
@@ -217,7 +248,6 @@ def account():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             temp.profile_pic = picture_file
-
         if form.phone.data:
             temp.phone = form.phone.data
         db.update_user(temp,user_id)

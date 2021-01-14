@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, TextAreaField, SubmitField, SelectField
-from wtforms.validators import InputRequired, EqualTo, ValidationError, Email
+from wtforms.validators import InputRequired, EqualTo, ValidationError, Email, Length
 from flask import current_app
 
 class LoginForm(FlaskForm):
@@ -24,6 +24,14 @@ class PostForm(FlaskForm):
     tag2 = StringField('Tag 2')
     submit = SubmitField('Publish')
 
+class SearchForm(FlaskForm):
+    choices = [('Color', 'Color'),
+               ('Situation', 'Situation'),
+               ('Category', 'Category')]
+    select = SelectField('Search for product:', choices=choices)
+    search = StringField('')
+
+    
 
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username',
@@ -34,8 +42,6 @@ class UpdateAccountForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired()])
     picture = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
 
-
-    
     submit = SubmitField('Update')
 
     

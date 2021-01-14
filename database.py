@@ -73,7 +73,7 @@ class Database:
         #user.key calısmayabilir
         connection.commit()
 
-
+    
     
     def delete_user(self,username):
         connection = dbapi2.connect(dsn)
@@ -155,15 +155,18 @@ class Database:
         info = cursor.fetchone()
         return info
 
-    def update_item(self, id, name, description, category_id):
+    def update_item(self, id, name, description, category_id, color, situation, file_name):
         connection = dbapi2.connect(dsn)
         cursor = connection.cursor()
         query ="""UPDATE items SET 
                     name = %s,
                     description = %s, 
-                    category_id = %s
+                    category_id = %s,
+                    image = %s,
+                    color = %s,
+                    situation = %s
                     WHERE (id = %s)"""
-        cursor.execute(query, (name, description,category_id, id))
+        cursor.execute(query, (name, description,category_id, file_name, color, situation, id))
         connection.commit()
     
     def get_items_from_category_name(self, category_name):
@@ -263,15 +266,18 @@ class Database:
         cursor.execute(query, {'id' : id})
         connection.commit()
 
+    def update_post(self,id,is_available,is_sold,tag1,tag2):
+        connection = dbapi2.connect(dsn)
+        cursor = connection.cursor()
+        query ="""UPDATE posts SET 
+                    is_active = %s,
+                    is_sold = %s, 
+                    tag1 = %s,
+                    tag2 = %s
+                    WHERE (id = %s)"""
+        cursor.execute(query, (is_available, is_sold, tag1, tag2, id,))
+        connection.commit()
 
-
-
-    
-
-    #INSERT INTO items (category_id,name,description) VALUES ((SELECT id from categories  WHERE category_name='furniture'), 'wassily chair', 'cool chair');
-
-
-        
 
 #dsn = """user='postgres' password='docker' host='localhost' port=5432 dbname='postgres'"""
 

@@ -13,53 +13,64 @@
             </h1>
             <br>
             <div class="columns is-centered">
+
+                
+
                 <div class ="column is-2">
+                    <!--
                     <ul>
                         <li>
                             Situation
                             <ul>
                                 <li>
-                                    <input type="radio" value='new' class="" name='situation'> New 
+                                    <input type="checkbox" value='new' class="" name='situation'> New 
                                 </li>
                                 <li>
-                                    <input type="radio" value='old' class="" name='situation'> Old 
+                                    <input type="checkbox" value='old' class="" name='situation'> Old 
                                 </li>
                                 <li>
-                                    <input type="radio" value='worn' class="" name='situation'> Worn 
+                                    <input type="checkbox" value='worn' class="" name='situation'> Worn 
                                 </li>
                             </ul>
                         </li>
                     </ul>
+                -->
+                
+                
+                <p>Select situation</p>
+                <input type="radio" id="new" name="situation" value="new">
+                <label for="new">New</label><br>
+                <input type="radio" id="old" name="situation" value="old">
+                <label for="old">Old</label><br>
+                <input type="radio" id="worn" name="situation" value="worn">
+                <label for="worn">Worn</label></br>
+                <input type="radio" id="all_situations" name="situation" value="all">
+                <label for="all">All Situations</label></br>
+                
                 </br>
-                    <ul>
-                        <li>
-                            Categories
-                            <ul>
-                                {% for category in categories %} 
-                                <li>
-                                    <input type="radio" value='{{ category }}' class="" name='situation'> {{ category }} 
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    </ul>
+                <p>Select Category</p>
+                {% for category in categories %} 
+                <input type="radio" id='{{ category }}' name="category" value='{{ category }}'>
+                <label for='{{ category }}'>{{ category }} </label><br>
+                {% endfor %}
+                <input type="radio" id="all_categories" name="category" value="all_categories">
+                <label for="all_categories"> All Categories </label><br>
                 </br>
-                    <ul>
-                        <li>
-                            Colors
-                            <ul>
-                                {% for color in colors %} 
-                                <li>
-                                    <input type="radio" value='{{ color }}' class="" name='situation'> {{ color }} 
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    </ul>
+
+                <p>Select Color</p>
+                {% for color in colors %} 
+                <input type="radio" id='{{ color }} ' name="color" value='{{ color }} '>
+                <label for='{{ color }}'>{{ color }} </label><br>
+                {% endfor %}
+                <input type="radio" id="all_colors" name="color" value="all_colors">
+                <label for="all_colors"> All Colors </label><br>
                 </br>
-                    <a href="" class="button is-primary">
-                        Go!
-                    </a>
+
+                
+                <input class="button is-primary" type="submit" value="Go!">
+                
+    
+                
                 </div>
                 <div class="column is-10">
                     <div class="columns is-multiline">
