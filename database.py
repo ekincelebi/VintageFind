@@ -195,7 +195,7 @@ class Database:
         cursor = connection.cursor()
         
         today = date.today()
-        today = today.strftime("%d/%m/%Y")
+        today = today.strftime("%m/%d/%Y")
         
         db = current_app.config["db"]
         user_id = db.get_user_id(username)

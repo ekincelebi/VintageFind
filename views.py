@@ -92,9 +92,9 @@ def publish_page():
         newItem.situation = situation
         
         if form.picture.data:
-            picture_file = save_picture(form.picture.data)
+            pic = save_picture(form.picture.data)
 
-        db.add_item_image(newItem, picture_file) #save item to item table
+        db.add_item_image(newItem, pic) #save item to item table
         ###create post neden title ismini alıyor ki bunu düzelt 
         
         tag1 = form.tag1.data #
@@ -249,11 +249,12 @@ def post_detail(post_id):
     local_item.situation = item_info[6]
     image_file = url_for('static', filename='profile_pics/' + item_info[4])
     local_item.image = image_file
+    pp = url_for('static', filename='profile_pics/' + user.profile_pic )
 
     #myItem = Item(title,description,category)
     #myPost = Post(self,item,username,post_date)
 
-    return render_template('detail.html', user=user, item=local_item, post=post)
+    return render_template('detail.html', user=user, item=local_item, post=post, pp = pp)
 
 
 @login_required
@@ -261,30 +262,30 @@ def account():
     form = UpdateAccountForm()
     db = current_app.config["db"]
     user_id = db.get_user_id(current_user.username)
-    #pp = url_for('static', filename='profile_pics/' + current_user.profile_pic)
-    image_file = url_for('static', filename='profile_pics/' + current_user.profile_pic)
+    pp = url_for('static', filename='profile_pics/' + current_user.profile_pic)
+    #image_file = url_for('static', filename='profile_pics/' + current_user.profile_pic)
     
     if form.validate_on_submit():
-        if current_user.password != form.password.data:
+        if bcrypt.check_password_hash(current_user.password, form.password.data):
+            temp = User(username=form.username.data,password=form.password.data,email=form.email.data, phone=form.password.data, profile_pic=current_user.profile_pic)
+            if form.picture.data:
+                picture_file = save_picture(form.picture.data)
+                temp.profile_pic = picture_file
+            if form.phone.data:
+                temp.phone = form.phone.data
+            db.update_user(temp,user_id)
+            #flash('Your account has been update!', 'success')
+            return redirect(url_for('account'))
+        else: 
             return ("Please enter correct password")
-        temp = User(username=form.username.data,password=form.password.data,email=form.email.data, phone=form.password.data, profile_pic=current_user.profile_pic)
-        if form.picture.data:
-            picture_file = save_picture(form.picture.data)
-            temp.profile_pic = picture_file
-        if form.phone.data:
-            temp.phone = form.phone.data
-        db.update_user(temp,user_id)
-        #flash('Your account has been update!', 'success')
-        return redirect(url_for('account'))
-
+        
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.password.data = current_user.password
         form.phone.data = current_user.phone
         form.email.data = current_user.email
         
-        
-        
+
     #######yukarısı update kısmı
     post_list = db.bring_users_post(current_user.username)
     posts = []
@@ -303,7 +304,7 @@ def account():
         temp.key = item[0] #init key
         posts.append(temp)
 
-    return render_template('account.html', posts=posts, form=form, img = image_file)
+    return render_template('account.html', posts=posts, form=form, img = pp)
 
 
 
@@ -315,5 +316,4 @@ def logout_page():
     #flash("You have logged out.")
     return redirect(url_for("home_page"))
 
-#############employee################
 
