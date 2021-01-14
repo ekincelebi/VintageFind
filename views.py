@@ -127,12 +127,11 @@ def ads_page():
         date = item[3]
 
         temp = Post(tempItem,user,date)
+        temp.key = item[0]
 
         temp.tag1 = item[6]
         temp.tag2 = item[7]
         posts.append(temp)
-
-        
 
     return render_template('ads.html', posts=posts, categories=categories, colors=colors)
 ####################################################
@@ -231,6 +230,25 @@ def delete_user(username):
     db.delete_user(username)
     #flash('Your post has been deleted!', 'success')
     return redirect(url_for("home_page"))
+
+def post_detail(post_id):
+    db = current_app.config["db"]
+    post = db.get_post(post_id)
+    user_id = post[1]
+    item_id = post[2]
+    user = db.read_user(user_id)
+    item_info = db.get_item_info(item_id)
+    #category_id = item_info[1]
+    category_name = 'temp'
+    local_item = Item(item_info[2],item_info[3],category_name)
+    local_item.color = item_info[5]
+    local_item.situation = item_info[6]
+
+
+    #myItem = Item(title,description,category)
+    #myPost = Post(self,item,username,post_date)
+
+    return render_template('detail.html', user=user, item=local_item, post=post)
 
 
 @login_required
