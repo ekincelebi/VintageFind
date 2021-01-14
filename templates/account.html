@@ -156,12 +156,12 @@
                                 {{ post.item.title }}
                                 </a>
                             </h3>
+                            <!--
                             <h4 class="subtitle is-size-7 ellipsis is-ellipsis-2">
                                 {{ post.item.description }}
                             </h4>
+                            -->
 
-                    
-                            
                             <form action="{{ url_for('delete_post', post_id=post.key) }}" method="POST">
                                 <input class="button is-danger" type="submit" value="Delete">
                             </form>

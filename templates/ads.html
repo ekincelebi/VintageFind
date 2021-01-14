@@ -77,8 +77,9 @@
                         
                         {% for post in posts %}  
                         <div class="column is-one-third">
+                            <a href="{{ url_for('post_detail', post_id=post.key) }}" class="has-text-primary">
                             <div class="card rb-card">
-                                <a href="{{ url_for('post_detail', post_id=post.key) }}" class="has-text-primary">
+                                
                                 <div class="card-image">
                                     <div class="card-image">
                                         <figure class="image is-16by9">
@@ -90,7 +91,7 @@
 
                                     <div class="columns is-vcentered">
                                         <div class="column is-half">
-                                            <a href = "" class="has-text-primary">{{ post.user }}</a>
+                                            <p class="bd-notification is-primary">{{ post.username }}</p>
                                         </div>
                                         <div class="column">
                                           <p class="bd-notification is-primary">{{ post.post_date }}</p>
@@ -99,11 +100,13 @@
                                     <h3 class="title is-size-6 ellipsis is-ellipsis-1">
                                         
                                             {{ post.item.title }}
-                                        </a>
+                                        
                                     </h3>
+                                    <!--
                                     <h4 class="subtitle is-size-7 ellipsis is-ellipsis-2">
                                         {{ post.item.description }}
                                     </h4>
+                                    -->
                                     {% if post.tag1 is not none %}
                                     <span class="tag is-light">{{ post.tag1 }}</span>
                                     {% else %}

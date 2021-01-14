@@ -1,4 +1,5 @@
-from passlib.hash import pbkdf2_sha256 as hasher
+#from passlib.hash import pbkdf2_sha256 as hasher
+from server import bcrypt
 from datetime import datetime
 from forms import LoginForm, RegistrationForm, PostForm, UpdateAccountForm, SearchForm
 from flask_wtf import FlaskForm
@@ -27,7 +28,8 @@ def login_page():
             #realpassword = temp.password
             user = User(username, temp.password,temp.email,temp.phone,temp.profile_pic)
             password = form.password.data
-            if password == temp.password: ##burayı sonra hashli yaparsın
+
+            if bcrypt.check_password_hash(temp.password,password):
                 login_user(user)
                 #flash("You have logged in.")
                 next_page = request.args.get("next", url_for("home_page"))
@@ -43,6 +45,7 @@ def register_page():
     form = RegistrationForm()
     if form.validate_on_submit():
         password = form.password.data
+        hashed_pw = bcrypt.generate_password_hash(password).decode('utf-8')
         username = form.username.data
         email = form.email.data
         temp = get_user(username)
@@ -53,7 +56,8 @@ def register_page():
         else:
             phone = "" #phone is initially empty
             profile_pic = "default.jpg"
-            user = User(username,password,email,phone,profile_pic)
+            user = User(username,hashed_pw,email,phone,profile_pic)
+            #user = User(username,password,email,phone,profile_pic)
             db.add_user(user)
             return redirect(url_for('login_page'))
     return render_template('register.html', form=form)
@@ -243,7 +247,8 @@ def post_detail(post_id):
     local_item = Item(item_info[2],item_info[3],category_name)
     local_item.color = item_info[5]
     local_item.situation = item_info[6]
-
+    image_file = url_for('static', filename='profile_pics/' + item_info[4])
+    local_item.image = image_file
 
     #myItem = Item(title,description,category)
     #myPost = Post(self,item,username,post_date)

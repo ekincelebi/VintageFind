@@ -5,10 +5,12 @@ import views
 from user import get_user
 import os
 from database import Database
+from flask_bcrypt import Bcrypt
 #from database import Database
 
 
 lm = LoginManager()
+bcrypt = Bcrypt()
 
 @lm.user_loader
 def load_user(user_id):
@@ -36,6 +38,8 @@ def create_app():
     
     lm.init_app(app)
     lm.login_view = "login_page"
+
+    bcrypt.init_app(app)
 
     db = Database()
     app.config["db"] = db
