@@ -242,8 +242,8 @@ def post_detail(post_id):
     item_id = post[2]
     user = db.read_user(user_id)
     item_info = db.get_item_info(item_id)
-    #category_id = item_info[1]
-    category_name = 'temp'
+    category_id = item_info[1]
+    category_name = db.get_category(category_id)[0]
     local_item = Item(item_info[2],item_info[3],category_name)
     local_item.color = item_info[5]
     local_item.situation = item_info[6]
@@ -264,10 +264,14 @@ def account():
     user_id = db.get_user_id(current_user.username)
     pp = url_for('static', filename='profile_pics/' + current_user.profile_pic)
     #image_file = url_for('static', filename='profile_pics/' + current_user.profile_pic)
+
     
     if form.validate_on_submit():
-        if bcrypt.check_password_hash(current_user.password, form.password.data):
-            temp = User(username=form.username.data,password=form.password.data,email=form.email.data, phone=form.password.data, profile_pic=current_user.profile_pic)
+        tmp = get_user(current_user.username)
+        password = form.password.data
+
+        if bcrypt.check_password_hash(tmp.password, password):
+            temp = User(username=form.username.data,password=tmp.password,email=form.email.data, phone=form.password.data, profile_pic=current_user.profile_pic)
             if form.picture.data:
                 picture_file = save_picture(form.picture.data)
                 temp.profile_pic = picture_file
