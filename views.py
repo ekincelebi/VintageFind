@@ -1,6 +1,5 @@
 #from passlib.hash import pbkdf2_sha256 as hasher
-import sys
-sys.path.append("./")
+
 from server import bcrypt
 from datetime import datetime
 from forms import LoginForm, RegistrationForm, PostForm, UpdateAccountForm, SearchForm
